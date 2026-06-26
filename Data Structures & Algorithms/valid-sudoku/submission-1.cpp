@@ -1,0 +1,56 @@
+class Solution {
+public:
+    bool isValidVector(vector<char>& v) {
+        unordered_set<char> s = {};
+
+        for (int i = 0; i < v.size(); i++) {
+            if (v[i] == '.') continue;
+            if(s.count(v[i])) {
+                return false;
+            }
+            s.insert(v[i]);
+        }
+
+        return true;
+    }
+
+    bool isValidSudoku(vector<vector<char>>& board) {
+        int n = board.size();
+        int m = (int) sqrt(n);
+
+        // check de rows
+        for (int i = 0; i < n; i++) {
+            if (!isValidVector(board[i])) {
+                return false;
+            }
+        }
+
+        // check the columns
+        for (int i = 0; i < n; i++) {
+            vector<char> column;
+            for (int j = 0; j < n; j++) {
+                column.push_back(board[j][i]);
+            }
+            if (!isValidVector(column)) {
+                return false;
+            }
+        }
+
+        // check the sub-boxes
+        for (int i = 0; i < n; i += m) {
+            for (int j = 0; j < n; j += m) {
+                vector<char> box;
+                for (int a = 0; a < m; a++) {
+                    for (int b = 0; b < m; b++) {
+                        box.push_back(board[i + a][j + b]);
+                    }
+                }
+                if (!isValidVector(box)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+};
